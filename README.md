@@ -45,7 +45,7 @@ Squishy uses boto3, which will automatically load credentials from
 give Squishy a factory function for creating a custom session.
 
 
-# CLI reference
+## CLI reference
 
 ```
 $ squishy --help
