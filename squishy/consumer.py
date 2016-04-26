@@ -8,13 +8,11 @@ from .logging import get_logger
 
 
 class SqsConsumer(object):
-    """Create a new consumer with the given queue URL, in the given
-    region. The consumer calls `callback` to each message.
+    """Create a new consumer with the given queue URL. The consumer calls
+    `callback` to each message.
 
     :param queue_url: URL of the queue to consume.
     :type queue_url: str
-    :param region: Region name for the region hosting the queue.
-    :type region: str
     :param callback: Function to call to handle incoming messages.
     :type callback: function
     :param session: Optional `boto3.Session` for providing customized
@@ -33,7 +31,7 @@ class SqsConsumer(object):
     :type polling_count: int
     """
 
-    def __init__(self, queue_url, region, worker, session=None,
+    def __init__(self, queue_url, worker, session=None,
                  use_short_polling=False, polling_timeout=10,
                  polling_count=10):
         self.use_short_polling = use_short_polling
@@ -41,7 +39,7 @@ class SqsConsumer(object):
         self.polling_count = polling_count
 
         self.session = session or Session()
-        self.sqs = self.session.client('sqs', region_name=region)
+        self.sqs = self.session.client('sqs')
         self.queue_url = queue_url
 
         self.logger = get_logger(__name__)

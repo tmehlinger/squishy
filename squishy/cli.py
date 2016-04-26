@@ -72,7 +72,6 @@ def cli(log_level, botocore_log_level):
 
 @cli.command()
 @click.argument('queue_url')
-@click.argument('region')
 @click.argument('callback', callback=import_callable)
 @click.option('--session-factory', type=str,
               callback=import_callable,
@@ -88,7 +87,7 @@ def cli(log_level, botocore_log_level):
 @click.option('-w', '--worker-class', default=DEFAULT_WORKER,
               type=WORKER_CHOICES, callback=import_worker,
               help='Worker class.')
-def run_consumer(queue_url, region, callback, session_factory=None, **kw):
+def run_consumer(queue_url, callback, session_factory=None, **kw):
     if session_factory:
         kw['session'] = session_factory()
 
@@ -99,8 +98,8 @@ def run_consumer(queue_url, region, callback, session_factory=None, **kw):
     get_logger(__name__).info('using worker class %s',
                               worker_cls.__name__)
 
-    consumer = SqsConsumer(queue_url, region, use_short_polling=short,
-                           worker=worker, **kw)
+    consumer = SqsConsumer(queue_url, use_short_polling=short, worker=worker,
+                           **kw)
     consumer.run()
 
 
