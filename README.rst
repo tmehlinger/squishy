@@ -27,7 +27,9 @@ Squishy provides a CLI to run a worker that will dispatch messages to a
 callback you define. The callback should accept a single parameter
 representing a single message consumed from an SQS queue.
 
-Example::
+Example:
+
+.. code-block::
 
     # my_consumer.py
 
