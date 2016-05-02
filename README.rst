@@ -29,7 +29,7 @@ representing a single message consumed from an SQS queue.
 
 Example:
 
-.. code-block::
+.. code-block:: python
 
     # my_consumer.py
 
