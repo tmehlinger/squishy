@@ -9,7 +9,7 @@ yet have a full battery of automated tests. Use at your own risk!
 
 
 Installing
-**********
+----------
 
 Currently, you have to clone the repo and install the hard way. This will
 change soon.
@@ -21,7 +21,7 @@ change soon.
 
 
 Using
-*****
+-----
 
 Squishy provides a CLI to run a worker that will dispatch messages to a
 callback you define. The callback should accept a single parameter
@@ -40,7 +40,7 @@ Then on the command line:
 
 
 Authentication
-**************
+--------------
 
 Squishy uses boto3, which will automatically load credentials from
 ``$HOME/.aws/credentials``. If you need more control over authentication, you can
@@ -48,7 +48,7 @@ give Squishy a factory function for creating a custom session.
 
 
 CLI reference
-*************
+-------------
 
 ::
 

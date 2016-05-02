@@ -5,8 +5,8 @@ from setuptools import setup, find_packages
 import pip
 
 
-with open('README.md') as fr:
-    with open('CHANGELOG.md') as fc:
+with open('README.rst') as fr:
+    with open('CHANGELOG.rst') as fc:
         long_description = '{}\n\n{}'.format(fr.read(), fc.read())
 
 
