@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from concurrent import futures
 
 from ..logging import get_logger
