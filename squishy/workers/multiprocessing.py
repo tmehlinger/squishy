@@ -21,7 +21,7 @@ class MultiprocessingWorker(BaseWorker):
             # they will get requeued after the interval configured on the
             # queue's policy.
             try:
-                result = self.pool.apply_async(self.func, message)
+                result = self.pool.apply_async(self.func, (message,))
             except:
                 self.logger.exception('cannot submit jobs to pool')
                 raise
