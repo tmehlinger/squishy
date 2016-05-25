@@ -29,7 +29,8 @@ class MultiprocessingWorker(BaseWorker):
                 result_to_message[result] = message
 
         while result_to_message:
-            for result in viewkeys(result_to_message):
+            keys = list(viewkeys(result_to_message))
+            for result in keys:
                 message = result_to_message[result]
                 try:
                     result.get()
