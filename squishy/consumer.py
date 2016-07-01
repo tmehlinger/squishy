@@ -104,7 +104,8 @@ class SqsConsumer(object):
         signal.signal(signal.SIGTERM, self.stop)
 
         self.poller_thread.start()
-        self.poller_thread.join()
+        while self.poller_thread.isAlive():
+            self.poller_thread.join(1)
 
         self.logger.info('done')
 

@@ -1,5 +1,8 @@
+from __future__ import absolute_import
+
 try:
     import gevent
+    import gevent.monkey
     gevent.monkey.patch_all()
     from gevent.pool import Pool
 except ImportError:
@@ -15,7 +18,7 @@ class GeventWorker(BaseWorker):
         # XXX: Is it necessary to patch all? I know we need at least, socket,
         # ssl, dns, and signal. There may be calls inside boto/botocore that
         # require more patching.
-        super(GeventWorker, self).__init__(self, func, pool_size=pool_size,
+        super(GeventWorker, self).__init__(func, pool_size=pool_size,
                                            timeout=timeout)
         self.logger = get_logger(__name__)
         self.pool = Pool(size=pool_size)

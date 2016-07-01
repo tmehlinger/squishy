@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from multiprocessing import pool
 import signal
 
@@ -19,7 +21,7 @@ class MultiprocessingWorker(BaseWorker):
             # they will get requeued after the interval configured on the
             # queue's policy.
             try:
-                result = self.pool.apply_async(self.func, message)
+                result = self.pool.apply_async(self.func, (message,))
             except:
                 self.logger.exception('cannot submit jobs to pool')
                 raise
@@ -27,7 +29,8 @@ class MultiprocessingWorker(BaseWorker):
                 result_to_message[result] = message
 
         while result_to_message:
-            for result in viewkeys(result_to_message):
+            keys = list(viewkeys(result_to_message))
+            for result in keys:
                 message = result_to_message[result]
                 try:
                     result.get()
