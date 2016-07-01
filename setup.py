@@ -28,7 +28,7 @@ install_requires = [str(r.req) for r in requirements]
 
 setup(
     name='squishy',
-    version='0.0.2',
+    version='0.0.3',
     description='A simple Amazon SQS consumer library.',
     long_description=long_description,
     author='Travis Mehlinger',
