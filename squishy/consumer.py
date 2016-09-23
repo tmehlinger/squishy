@@ -114,7 +114,7 @@ class SqsConsumer(object):
 
         return failed
 
-    def run(self):
+    def run(self, join_timeout=1):
         """Run the consumer."""
         self.logger.warning('starting up')
 
@@ -123,7 +123,7 @@ class SqsConsumer(object):
 
         self.poller_thread.start()
         while self.poller_thread.isAlive():
-            self.poller_thread.join(1)
+            self.poller_thread.join(join_timeout)
 
         self.logger.info('done')
 
