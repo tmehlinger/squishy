@@ -95,8 +95,7 @@ class SqsConsumer(object):
         entries = [{'Id': message['MessageId'],
                     'ReceiptHandle': message['ReceiptHandle']}
                    for message in messages]
-        self.sqs.delete_message_batch(QueueUrl=self.queue_url,
-                                      Entries=entries)
+        self.sqs.delete_message_batch(QueueUrl=self.queue_url, Entries=entries)
 
     def run(self):
         """Run the consumer."""

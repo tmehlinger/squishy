@@ -40,8 +40,7 @@ def import_callable(ctx, param, value):
     try:
         mod, identifier = value.rsplit(delim, 1)
     except ValueError:
-        raise click.BadParameter('{} is not importable'
-                                 .format(mod))
+        raise click.BadParameter('{} is not importable' .format(mod))
     try:
         func_or_cls = getattr(importlib.import_module(mod), identifier)
     except AttributeError:
@@ -75,8 +74,7 @@ def cli(log_level, botocore_log_level):
 @cli.command()
 @click.argument('queue_url')
 @click.argument('callback', callback=import_callable)
-@click.option('--session-factory', type=str,
-              callback=import_callable,
+@click.option('--session-factory', type=str, callback=import_callable,
               help='Factory function for a custom boto3.Session.')
 @click.option('-c', '--concurrency', default=8, type=int,
               help='Worker concurrency.')
@@ -97,8 +95,7 @@ def run_consumer(queue_url, callback, session_factory=None, **kw):
     worker_cls = kw.pop('worker_class')
     worker = worker_cls(callback, pool_size=kw.pop('concurrency'))
 
-    get_logger(__name__).info('using worker class %s',
-                              worker_cls.__name__)
+    get_logger(__name__).info('using worker class %s', worker_cls.__name__)
 
     consumer = SqsConsumer(queue_url, use_short_polling=short, worker=worker,
                            **kw)
