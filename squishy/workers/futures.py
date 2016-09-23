@@ -34,7 +34,7 @@ class FuturesWorker(BaseWorker):
                 future.result()
             except:
                 self.logger.exception('exception processing message %s',
-                                      message['MessageId'])
+                                      message.message_id)
             else:
                 to_delete.append(message)
 

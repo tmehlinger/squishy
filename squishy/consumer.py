@@ -5,6 +5,7 @@ import signal
 from threading import Event, Thread
 
 from boto3 import Session
+from six.moves.urllib.parse import urlsplit
 
 from .logging import get_logger
 
@@ -33,16 +34,19 @@ class SqsConsumer(object):
     :type polling_count: int
     """
 
-    def __init__(self, queue_url, worker, session=None,
-                 use_short_polling=False, polling_timeout=10,
-                 polling_count=10):
+    def __init__(self, queue_url, worker, session=None, use_short_polling=False,
+                 polling_timeout=10, polling_count=10):
         self.use_short_polling = use_short_polling
         self.polling_timeout = polling_timeout
         self.polling_count = polling_count
 
-        self.session = session or Session()
-        self.sqs = self.session.client('sqs')
-        self.queue_url = queue_url
+        if not session:
+            region_name = self.parse_region_name(queue_url)
+            session = Session(region_name=region_name)
+
+        self.session = session
+        self.sqs = self.session.resource('sqs')
+        self.queue = self.sqs.Queue(url=queue_url)
 
         self.logger = get_logger(__name__)
 
@@ -50,22 +54,29 @@ class SqsConsumer(object):
         self.poller_thread = Thread(group=None, target=self._poll_messages)
         self.worker = worker
 
+    @staticmethod
+    def parse_region_name(queue_url):
+        parts = urlsplit(queue_url)
+        try:
+            # sqs, <region name>, amazonaws, com
+            _, region_name, _, _ = parts.netloc.split('.')
+        except ValueError:
+            raise RuntimeError('the given queue URL is not valid')
+        return region_name
+
     def _poll_messages(self):
         while not self.should_stop.is_set():
             start = datetime.utcnow()
             self.logger.debug('polling for messages')
 
             kw = {
-                'QueueUrl': self.queue_url,
                 'MaxNumberOfMessages': self.polling_count,
             }
             # Note: If we're long polling, the call to ReceiveMessage blocks
             # for `polling_timeout` seconds.
             if not self.use_short_polling:
                 kw['WaitTimeSeconds'] = self.polling_timeout
-            envelope = self.sqs.receive_message(**kw)
-
-            messages = envelope.get('Messages', [])
+            messages = self.queue.receive_messages(**kw)
             finished = self.worker.process_messages(messages)
 
             self._delete_messages(finished)
@@ -92,10 +103,16 @@ class SqsConsumer(object):
         if not messages:
             return
 
-        entries = [{'Id': message['MessageId'],
-                    'ReceiptHandle': message['ReceiptHandle']}
+        entries = [{'Id': message.message_id, 'ReceiptHandle':
+                    message.receipt_handle}
                    for message in messages]
-        self.sqs.delete_message_batch(QueueUrl=self.queue_url, Entries=entries)
+        result = self.queue.delete_messages(Entries=entries)
+        msg = 'failed to delete message %s, code %s, sender fault %s'
+        failed = result.get('Failed', [])
+        for f in failed:
+            self.logger.error(msg, f['Id'], f['Code'], f['SenderFault'])
+
+        return failed
 
     def run(self):
         """Run the consumer."""
