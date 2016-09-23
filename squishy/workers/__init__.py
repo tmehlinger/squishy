@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+
+
 WORKER_CLASSES = {
     'gevent': 'squishy.workers.gevent.GeventWorker',
     'futures_process': 'squishy.workers.futures.ProcessPoolWorker',
