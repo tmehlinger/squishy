@@ -59,7 +59,7 @@ class SqsConsumer(object):
                 'QueueUrl': self.queue_url,
                 'MaxNumberOfMessages': self.polling_count,
             }
-            # Note: If we're long polling, the call to ReceiveMessage block
+            # Note: If we're long polling, the call to ReceiveMessage blocks
             # for `polling_timeout` seconds.
             if not self.use_short_polling:
                 kw['WaitTimeSeconds'] = self.polling_timeout

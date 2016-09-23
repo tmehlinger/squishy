@@ -16,8 +16,8 @@ class MultiprocessingWorker(BaseWorker):
         self.logger.debug('processing %d messages', len(messages))
         for message in messages:
             # ThreadPoolExecutor will throw a RuntimeException if we try
-            # to # submit while it's shutting down. If we encounter a
-            # RuntimeError, # immediately stop trying to submit new tasks;
+            # to submit while it's shutting down. If we encounter a
+            # RuntimeError, immediately stop trying to submit new tasks;
             # they will get requeued after the interval configured on the
             # queue's policy.
             try:
