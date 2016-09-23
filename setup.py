@@ -4,6 +4,8 @@ import sys
 from setuptools import setup, find_packages
 import pip
 
+from squishy import __version__
+
 
 with open('README.rst') as fr:
     with open('CHANGELOG.rst') as fc:
@@ -28,7 +30,7 @@ install_requires = [str(r.req) for r in requirements]
 
 setup(
     name='squishy',
-    version='0.0.3',
+    version=__version__,
     description='A simple Amazon SQS consumer library.',
     long_description=long_description,
     author='Travis Mehlinger',
