@@ -5,7 +5,7 @@ import signal
 from threading import Event, Thread
 
 from boto3 import Session
-from six.moves.urllib.parse import urlsplit
+from six.moves.urllib.parse import urlsplit  # pylint: disable=import-error
 
 from .logging import get_logger
 
