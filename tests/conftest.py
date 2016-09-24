@@ -1,3 +1,5 @@
+import uuid
+
 import boto3
 import mock
 import moto
@@ -8,16 +10,18 @@ from squishy.workers.base import BaseWorker
 
 
 @pytest.fixture
-def queue(request):
+def sqs(request):
     mock = moto.mock_sqs()
     mock.start()
-
     sqs = boto3.resource('sqs', region_name='us-east-1')
+    request.addfinalizer(mock.stop)
+    return sqs
+
+
+@pytest.fixture
+def queue(sqs):
     q = sqs.create_queue(QueueName='test-queue')
     q.set_attributes(Attributes={'VisibilityTimeout': '10'})
-
-    request.addfinalizer(mock.stop)
-
     return q
 
 
@@ -30,12 +34,12 @@ def callback():
 
 @pytest.fixture
 def worker(callback):
-    class TestWorker(BaseWorker):
+    class MockWorker(BaseWorker):
         process_messages_called_with = None
         shutdown_called = False
 
         def __init__(self, func, **kwargs):
-            super(TestWorker, self).__init__(func, **kwargs)
+            super(MockWorker, self).__init__(func, **kwargs)
 
         def process_messages(self, messages):
             self.process_messages_called_with = messages
@@ -43,12 +47,12 @@ def worker(callback):
         def shutdown(self):
             self.shutdown_called = True
 
-    return TestWorker(callback)
+    return MockWorker(callback)
 
 
 @pytest.fixture
 def consumer(request, queue, worker):
-    class TestEvent(object):
+    class MockEvent(object):
         is_set_was_called = False
 
         def is_set(self):
@@ -64,5 +68,5 @@ def consumer(request, queue, worker):
             return True
 
     c = SqsConsumer(queue.url, worker, polling_timeout=0)
-    c.should_stop = TestEvent()
+    c.should_stop = MockEvent()
     return c
