@@ -5,10 +5,10 @@ import pytest
 from squishy.workers import futures, multiprocessing
 
 
-# we declare Callback, Errback and Message mocks here rather than using fixtures
-# because pytest will mangle the namespace, meaning, the pickler inside some
-# of the worker pools won't be able to serialize them to dispatch for
-# processing
+# we declare Callback, Errback and Message mocks here rather than using
+# fixtures because pytest will mangle the namespace, meaning, the pickler
+# inside some of the worker pools won't be able to serialize them to dispatch
+# for processing
 def callback(_):
     pass
 

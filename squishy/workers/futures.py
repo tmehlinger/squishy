@@ -10,7 +10,6 @@ from ..logging import get_logger
 from .base import BaseWorker
 
 
-
 class FuturesWorker(BaseWorker):
     def process_messages(self, messages):
         future_to_message = {}

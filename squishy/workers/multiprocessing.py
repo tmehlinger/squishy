@@ -59,8 +59,8 @@ class ProcessPoolWorker(MultiprocessingWorker):
         # an exception and terminate.
         super(ProcessPoolWorker, self).__init__(func, pool_size=pool_size,
                                                 timeout=timeout)
-        self.pool =  pool.Pool(processes=pool_size,
-                               initializer=init_process_pool)
+        self.pool = pool.Pool(processes=pool_size,
+                              initializer=init_process_pool)
         self.logger = get_logger(__name__)
 
 

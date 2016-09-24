@@ -8,4 +8,3 @@ WORKER_CLASSES = {
     'mp_process': 'squishy.workers.multiprocessing.ProcessPoolWorker',
     'mp_thread': 'squishy.workers.multiprocessing.ThreadPoolWorker',
 }
-

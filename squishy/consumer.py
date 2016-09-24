@@ -34,8 +34,9 @@ class SqsConsumer(object):
     :type polling_count: int
     """
 
-    def __init__(self, queue_url, worker, session=None, use_short_polling=False,
-                 polling_timeout=10, polling_count=10):
+    def __init__(self, queue_url, worker, session=None,
+                 use_short_polling=False, polling_timeout=10,
+                 polling_count=10):
         self.use_short_polling = use_short_polling
         self.polling_timeout = polling_timeout
         self.polling_count = polling_count
