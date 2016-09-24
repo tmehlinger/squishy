@@ -25,7 +25,7 @@ class GeventWorker(BaseWorker):
 
     def process_messages(self, messages):
         greenlet_to_message = {}
-        to_delete = []
+        processed = []
 
         self.logger.debug('processesing %d messages', len(messages))
 
@@ -40,12 +40,12 @@ class GeventWorker(BaseWorker):
         for g in gevent.iwait(greenlet_to_message):
             message = greenlet_to_message[g]
             if g.successful():
-                to_delete.append(message)
+                processed.append(message)
             else:
                 self.logger.exception('exception processing message %s',
                                       message['MessageId'])
 
-        return to_delete
+        return processed
 
     def shutdown(self):
         self.pool.join()

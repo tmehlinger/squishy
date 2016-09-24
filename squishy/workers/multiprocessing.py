@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from multiprocessing import pool
 import signal
 
-from .._compat import viewkeys
 from ..logging import get_logger
 from .base import BaseWorker
 
@@ -15,7 +14,7 @@ class MultiprocessingWorker(BaseWorker):
 
         self.logger.debug('processing %d messages', len(messages))
         for message in messages:
-            # ThreadPoolExecutor will throw a RuntimeException if we try
+            # ThreadPool/ProcessPool will throw a RuntimeException if we try
             # to submit while it's shutting down. If we encounter a
             # RuntimeError, immediately stop trying to submit new tasks;
             # they will get requeued after the interval configured on the
@@ -29,16 +28,15 @@ class MultiprocessingWorker(BaseWorker):
                 result_to_message[result] = message
 
         while result_to_message:
-            keys = list(viewkeys(result_to_message))
+            keys = list(result_to_message.keys())
             for result in keys:
-                message = result_to_message[result]
+                message = result_to_message.pop(result)
                 try:
                     result.get()
                 except:
                     self.logger.exception('exception processing message %s',
-                                          message['MessageId'])
+                                          message.message_id)
                 else:
-                    del result_to_message[result]
                     processed.append(message)
 
         return processed

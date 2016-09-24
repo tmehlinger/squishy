@@ -10,15 +10,15 @@ from .base import BaseWorker
 class FuturesWorker(BaseWorker):
     def process_messages(self, messages):
         future_to_message = {}
-        to_delete = []
+        processed = []
 
         self.logger.debug('processing %d messages', len(messages))
         for message in messages:
-            # ThreadPoolExecutor will throw a RuntimeException if we try
-            # to # submit while it's shutting down. If we encounter a
-            # RuntimeError, # immediately stop trying to submit new tasks;
-            # they will get requeued after the interval configured on the
-            # queue's policy.
+            # ThreadPoolExecutor/ProcessPoolExecutor will throw a
+            # RuntimeException if we try to submit while it's shutting down.
+            # If we encounter a RuntimeError, immediately stop trying to
+            # submit new tasks; they will get requeued after the interval
+            # configured on the queue's policy.
             try:
                 future = self.pool.submit(self.func, message)
             except RuntimeError:
@@ -29,16 +29,16 @@ class FuturesWorker(BaseWorker):
 
         for future in futures.as_completed(future_to_message,
                                            timeout=self.timeout):
-            message = future_to_message[future]
+            message = future_to_message.pop(future)
             try:
                 future.result()
             except:
                 self.logger.exception('exception processing message %s',
                                       message.message_id)
             else:
-                to_delete.append(message)
+                processed.append(message)
 
-        return to_delete
+        return processed
 
     def shutdown(self):
         self.pool.shutdown()
