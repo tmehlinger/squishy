@@ -5,7 +5,8 @@ Squishy
     :target: https://circleci.com/gh/tmehlinger/squishy/tree/master
 
 Squishy is a simple Amazon SQS consumer for Python. Many versions of Python
-are supported, including 2.6, 2.7, 3.3, 3.4, and 3.5.
+are supported, including 2.7, 3.3, 3.4, and 3.5. 2.6 should work but it is
+untested and unsupported.
 
 This is currently *beta* software! It has a suite of tests and it's being used
 for non-critical production tasks but it is still very young software.
