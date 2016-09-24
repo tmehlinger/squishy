@@ -7,3 +7,4 @@ if __name__ == '__main__':
         print('running coveralls')
         rc = call('coveralls')
         raise SystemExit(rc)
+    print('NOT running coveralls')
