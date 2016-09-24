@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from squishy.workers import futures, multiprocessing
+from squishy.workers import futures, gevent, multiprocessing
 
 
 # we declare Callback, Errback and Message mocks here rather than using
@@ -25,6 +25,7 @@ class Message(object):
 @pytest.mark.parametrize('worker_cls', [
     futures.ProcessPoolWorker,
     futures.ThreadPoolWorker,
+    gevent.GeventWorker,
     multiprocessing.ProcessPoolWorker,
     multiprocessing.ThreadPoolWorker,
 ])
@@ -39,6 +40,7 @@ def test_process_messages(worker_cls):
 @pytest.mark.parametrize('worker_cls', [
     futures.ProcessPoolWorker,
     futures.ThreadPoolWorker,
+    gevent.GeventWorker,
     multiprocessing.ProcessPoolWorker,
     multiprocessing.ThreadPoolWorker,
 ])

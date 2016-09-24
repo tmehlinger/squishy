@@ -55,6 +55,10 @@ def import_callable(ctx, param, value):
 
 def import_worker(ctx, param, value):
     importable = WORKER_CLASSES[value]
+    if value == 'gevent':
+        import gevent.monkey
+        gevent.monkey.patch_socket()
+        gevent.monkey.patch_ssl()
     return import_callable(ctx, param, importable)
 
 
@@ -93,6 +97,7 @@ def run_consumer(queue_url, callback, session_factory=None, **kw):
 
     short = kw.pop('polling_method') == 'short'
     worker_cls = kw.pop('worker_class')
+
     worker = worker_cls(callback, pool_size=kw.pop('concurrency'))
 
     get_logger(__name__).info('using worker class %s', worker_cls.__name__)

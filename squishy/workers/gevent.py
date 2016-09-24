@@ -2,8 +2,6 @@ from __future__ import absolute_import
 
 try:
     import gevent
-    import gevent.monkey
-    gevent.monkey.patch_all()
     from gevent.pool import Pool
 except ImportError:
     raise RuntimeError('cannot use gevent worker; gevent is not installed')
@@ -38,12 +36,15 @@ class GeventWorker(BaseWorker):
             greenlet_to_message[g] = message
 
         for g in gevent.iwait(greenlet_to_message):
-            message = greenlet_to_message[g]
-            if g.successful():
-                processed.append(message)
-            else:
+            message = greenlet_to_message.pop(g)
+            try:
+                if g.exception:
+                    raise g.exception
+            except:
                 self.logger.exception('exception processing message %s',
-                                      message['MessageId'])
+                                      message.message_id)
+            else:
+                processed.append(message)
 
         return processed
 
