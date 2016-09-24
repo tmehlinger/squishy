@@ -1,7 +1,7 @@
 Squishy
 =======
 
-.. image:: https://circleci.com/gh/tmehlinger/squishy/tree/master.svg?style=svg
+.. image:: https://circleci.com/gh/tmehlinger/squishy/tree/master.svg?style=shield
     :target: https://circleci.com/gh/tmehlinger/squishy/tree/master
 .. image:: https://coveralls.io/repos/github/tmehlinger/squishy/badge.svg?branch=master
     :target: https://coveralls.io/github/tmehlinger/squishy?branch=master
