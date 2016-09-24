@@ -2,22 +2,26 @@ Squishy
 =======
 
 Squishy is a simple Amazon SQS consumer for Python. Many versions of Python
-are (or will be) supported.
+are supported, including 2.6, 2.7, 3.3, 3.4, and 3.5.
 
-This is currently *alpha* software! It works under basic testing but does not
-yet have a full battery of automated tests. Use at your own risk!
+This is currently *beta* software! It has a suite of tests and it's being used
+for non-critical production tasks but it is still very young software.
 
 
 Installing
 ----------
 
-Currently, you have to clone the repo and install the hard way. This will
-change soon.
+Install from pypi: `pip install squishy`
 
+
+Developing
+----------
+
+* Create a virtualenv.
 * Clone the repo.
 * Install the requirements. If you want to use the futures workers on Python
-  2, be sure to install `futures <https://pypi.python.org/pypi/futures>`_.
-* ``python setup.py install``
+  2.6 or 2.7, be sure to install `futures <https://pypi.python.org/pypi/futures>`_.
+* Run ``python setup.py develop`` to get the `squishy` CLI tool.
 
 
 Using
@@ -25,7 +29,8 @@ Using
 
 Squishy provides a CLI to run a worker that will dispatch messages to a
 callback you define. The callback should accept a single parameter
-representing a single message consumed from an SQS queue.
+representing a single message consumed from an SQS queue. The message will be
+an instance of `SQS.Message <http://boto3.readthedocs.io/en/latest/reference/services/sqs.html#message>`_
 
 Example:
 
@@ -34,7 +39,7 @@ Example:
     # my_consumer.py
 
     def my_callback(message):
-        print('Got a message! Contents:', message)
+        print('Got a message! Contents:', message.body)
 
 Then on the command line:
 

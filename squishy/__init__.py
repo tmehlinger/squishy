@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 
 _major_version = '0'
-_minor_version = '0'
-_minor_revision = '4'
+_minor_version = '1'
+_minor_revision = '0'
 
 __version__ = '{}.{}.{}'.format(
     _major_version, _minor_version, _minor_revision)
