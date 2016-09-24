@@ -1,6 +1,10 @@
 from __future__ import absolute_import
 
-from concurrent import futures
+try:
+    from concurrent import futures
+except ImportError:
+    raise RuntimeError('could not import concurrent.futures; did you forget'
+                       'to install `futures` on Python 2.7?')
 
 from ..logging import get_logger
 from .base import BaseWorker
