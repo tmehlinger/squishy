@@ -1,0 +1,10 @@
+machine:
+  python: 3.5.2
+
+dependencies:
+  cache_directories:
+    - ~/squishy/.tox
+
+test:
+  override:
+    - tox
