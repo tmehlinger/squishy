@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from squishy.workers import futures, gevent, multiprocessing
+from squishy.workers import base, futures, gevent, multiprocessing
 
 
 # we declare Callback, Errback and Message mocks here rather than using
@@ -50,3 +50,15 @@ def test_process_messages_with_exception(worker_cls):
     to_delete = w.process_messages([msg])
     w.shutdown()
     assert len(to_delete) == 0
+
+
+def test_base_process_messages():
+    w = base.BaseWorker(None)
+    with pytest.raises(NotImplementedError):
+        w.process_messages(None)
+
+
+def test_base_shutdown():
+    w = base.BaseWorker(None)
+    with pytest.raises(NotImplementedError):
+        w.shutdown()
