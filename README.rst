@@ -14,7 +14,7 @@ for non-critical production tasks but it is still very young software.
 Installing
 ----------
 
-Install from pypi: `pip install squishy`
+Install from pypi: ``pip install squishy``
 
 
 Developing
