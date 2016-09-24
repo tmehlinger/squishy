@@ -33,24 +33,22 @@ def import_callable(ctx, param, value):
         return None
 
     delim = ':'
-    is_func = delim in value
-    if not is_func:
-        delim = '.'
+    if delim not in value:
+        raise click.BadParameter(
+            'string to import should have the form '
+            'pkg.module:callable_attribute')
 
-    try:
-        mod, identifier = value.rsplit(delim, 1)
-    except ValueError:
-        raise click.BadParameter('{} is not importable' .format(mod))
+    mod, identifier = value.rsplit(delim, 1)
+
     try:
         func_or_cls = getattr(importlib.import_module(mod), identifier)
     except AttributeError:
         raise click.BadParameter('{} does not exist in {}'
                                  .format(identifier, mod))
 
-    if is_func or hasattr(func_or_cls, '__call__'):
+    if callable(func_or_cls):
         return func_or_cls
-    raise RuntimeError('{} is a class but it has no __call__ method'
-                       .format(value))
+    raise RuntimeError('{} is not callable'.format(value))
 
 
 def import_worker(ctx, param, value):
