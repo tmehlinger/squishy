@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.1.1
+-----
+
+Bug fixes
+^^^^^^^^^
+* The string used to import a callback now much have a colon in it, matching the behavior of setuptools. This was implied before but not required.
+* The gevent worker no longer fails with an AttributeError when processing messages.
+
+New features
+^^^^^^^^^^^^
+* Vastly improved test coverage.
+
+
 0.1.0
 -----
 
@@ -10,7 +23,7 @@ Changelog
 
 Bug fixes
 ^^^^^^^^^
-* Fixed a bug in the multiprocessing workers where they would iterate infinitely if the callback raised an exception. (Travis Mehlinger)
+* Fixed a bug in the multiprocessing workers where they would iterate infinitely if the callback raised an exception.
 
 New features
 ^^^^^^^^^^^^
