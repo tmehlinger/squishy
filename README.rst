@@ -24,7 +24,7 @@ Developing
 * Clone the repo.
 * Install the requirements. If you want to use the futures workers on Python
   2.6 or 2.7, be sure to install `futures <https://pypi.python.org/pypi/futures>`_.
-* Run ``python setup.py develop`` to get the `squishy` CLI tool.
+* Run ``python setup.py develop`` to get the ``squishy`` CLI tool.
 
 
 Using
