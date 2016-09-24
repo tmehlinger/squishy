@@ -2,10 +2,6 @@ machine:
   post:
     - pyenv global 2.7.11 3.3.6 3.4.4 3.5.1
 
-dependencies:
-  cache_directories:
-    - ~/squishy/.tox
-
 test:
   override:
     - tox
