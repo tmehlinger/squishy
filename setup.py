@@ -14,7 +14,7 @@ with open('README.rst') as fr:
 
 ver = sys.version_info[:2]
 
-if (ver[0] == 2 and ver < (2, 6)) or (ver[0] == 3 and ver < (3, 3)):
+if (ver < (2, 7)) or (ver[0] == 3 and ver < (3, 3)):
     raise RuntimeError('unsupported Python version')
 
 extras_require = {'gevent': ['gevent>=1.1.0']}
