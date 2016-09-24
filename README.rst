@@ -33,7 +33,7 @@ Using
 Squishy provides a CLI to run a worker that will dispatch messages to a
 callback you define. The callback should accept a single parameter
 representing a single message consumed from an SQS queue. The message will be
-an instance of `SQS.Message <http://boto3.readthedocs.io/en/latest/reference/services/sqs.html#message>`_
+an instance of `SQS.Message <http://boto3.readthedocs.io/en/latest/reference/services/sqs.html#message>`_.
 
 Example:
 
