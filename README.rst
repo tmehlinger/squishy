@@ -94,3 +94,42 @@ CLI reference
       -w, --worker-class [futures_process|futures_thread|gevent|mp_process|mp_thread]
                                       Worker class.
       --help                          Show this message and exit.
+
+
+Examples
+--------
+
+Using Squishy to submit tasks to Celery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Callback code:
+
+.. code-block:: python
+
+    # squishy_celery.py
+
+    import logging
+    import os
+
+    from celery import Celery
+
+
+    log = logging.getLogger(__name__)
+
+
+    class MySquishyCallback(object):
+        def __init__(self, broker_url, task_name):
+            self.celery_app = Celery(__name__, broker=broker_url)
+            self.task_name = task_name
+
+        def __call__(self, message):
+            log.info('received a message!')
+            body = message.body
+            self.celery_app.send_task(self.task_name, args=(body,))
+
+    callback = MySquishyCallback(os.environ['MY_BROKER_URL'], 'my.celery.task')
+
+
+Starting the consumer:
+
+    ``$ squishy run_consumer https://sqs.us-east-1.amazonaws.com/12345/my_queue squishy_celery:callback``
