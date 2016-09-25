@@ -17,7 +17,10 @@ ver = sys.version_info[:2]
 if (ver < (2, 7)) or (ver[0] == 3 and ver < (3, 3)):
     raise RuntimeError('unsupported Python version')
 
-extras_require = {'gevent': ['gevent>=1.1.0']}
+extras_require = {
+    'gevent': ['gevent>=1.1.0'],
+    'raven': ['raven>=5.27.1'],
+}
 
 if ver[0] == 2:
     extras_require['futures'] = ['futures>=3.0.5']

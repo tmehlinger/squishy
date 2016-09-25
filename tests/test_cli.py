@@ -17,6 +17,13 @@ def test_get_log_level():
                 getattr(logging, level.upper()))
 
 
+def test_enable_sentry():
+    import raven
+    dsn = 'https://id:secret@sentry.example.com/0'
+    client = cli.enable_sentry(None, None, dsn)
+    assert isinstance(client, raven.Client)
+
+
 def test_import_callable_func():
     func = cli.import_callable(None, None, 'squishy.noop:noop_callback')
     assert callable(func)

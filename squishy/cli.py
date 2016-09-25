@@ -28,6 +28,15 @@ def get_log_level(ctx, param, value):
     return getattr(logging, value.upper())
 
 
+def enable_sentry(ctx, param, value):
+    if not value:
+        return
+    import raven
+    cl = raven.Client(value)
+    ctx.obj['raven_client'] = cl
+    return value
+
+
 def import_callable(ctx, param, value):
     if value is None:
         return None
@@ -67,17 +76,22 @@ def import_worker(ctx, param, value):
 @click.option('--botocore-log-level', default='critical',
               type=LOG_CHOICES, callback=get_log_level,
               help='botocore logging level.')
+@click.option('--sentry-dsn', default=None, callback=enable_sentry,
+              metavar='SENTRY_DSN',
+              help='Sentry DSN to use for reporting errors.')
 @click.version_option(version=__version__)
-def cli(log_level, botocore_log_level):
+def cli(log_level, botocore_log_level, sentry_dsn):
     logging.basicConfig(level=log_level, format=FORMAT)
     logging.getLogger('botocore').setLevel(botocore_log_level)
 
 
 @cli.command()
-@click.argument('queue_url')
-@click.argument('callback', callback=import_callable)
+@click.argument('queue_url', metavar='<QUEUE URL>')
+@click.argument('callback', callback=import_callable,
+                metavar='<IMPORTABLE CALLBACK>')
 @click.option('--session-factory', type=str, callback=import_callable,
-              help='Factory function for a custom boto3.Session.')
+              metavar='SESSION_FACTORY',
+              help='Importable factory function for a custom boto3.Session.')
 @click.option('-c', '--concurrency', default=8, type=int,
               help='Worker concurrency.')
 @click.option('-m', '--polling-method', default='long',
@@ -93,6 +107,7 @@ def run_consumer(queue_url, callback, session_factory=None, **kw):
     if session_factory:
         kw['session'] = session_factory()
 
+    raven_client = ctx.obj.get('raven_client')
     short = kw.pop('polling_method') == 'short'
     worker_cls = kw.pop('worker_class')
 
