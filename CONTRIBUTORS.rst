@@ -1,5 +1,5 @@
 Squishy contributors
 ====================
 
-Travis Mehlinger (tmehlinger)
-Alejandro Mesa (alejom99)
+* `Travis Mehlinger <https://github.com/tmehlinger>`_ (maintainer)
+* `Alejandro Mesa <https://github.com/alejom99>`_
